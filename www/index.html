@@ -653,7 +653,7 @@ async function claudeChat(system, messages, onText, signal){
   const res = await fetch("https://api.anthropic.com/v1/messages",{
     method:"POST", signal,
     headers:{"content-type":"application/json","x-api-key":cfg("key",""),"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
-    body:JSON.stringify({model:cfg("model","claude-sonnet-5-5"),max_tokens:1200,system,messages,stream:true})
+    body:JSON.stringify({model:cfg("model","claude-sonnet-5-5"),max_tokens:8000,system,messages,stream:true})
   });
   if(!res.ok){ let m=""; try{ m=(await res.json())?.error?.message||"" }catch(e){} const er=new Error(m); er.status=res.status; throw er; }
   const reader=res.body.getReader(), dec=new TextDecoder(); let buf="", text="";
