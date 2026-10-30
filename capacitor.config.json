@@ -1,0 +1,8 @@
+{
+  "appId": "br.caiovieira.agora",
+  "appName": "Ágora",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#f5f0e6"
+  }
+}

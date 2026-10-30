@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f5f0e6">
+<title>Ágora</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f5f0e6; --paper2:#ece4d4; --card:#fffdf8; --ink:#211c18; --muted:#6e645a;
+  --line:#ddd2bf; --accent:#a8492a; --accent-soft:#f3dfd3;
+  --serif:"Cormorant Garamond", Georgia, serif; --sans:"Inter", system-ui, sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:1120px;margin:0 auto;padding:0 18px}
+
+/* HOME */
+header.hero{padding:34px 0 18px;border-bottom:1px solid var(--line);background:
+  radial-gradient(1200px 300px at 50% -120px, #e8d8bf 0%, transparent 70%)}
+.brand{display:flex;align-items:baseline;gap:10px}
+.brand h1{font-family:var(--serif);font-weight:700;font-size:44px;margin:0;letter-spacing:.5px}
+.brand span{font-family:var(--serif);font-style:italic;color:var(--muted);font-size:20px}
+.hero p{max-width:620px;color:var(--muted);line-height:1.55;margin:10px 0 18px;font-size:15px}
+.controls{display:flex;flex-direction:column;gap:12px}
+.search{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;max-width:460px}
+.search input{border:0;outline:0;background:transparent;font:inherit;width:100%;font-size:15px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:7px 14px;font-size:13px;white-space:nowrap}
+.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+main.home{padding:24px 18px 60px}
+.era-title{font-family:var(--serif);font-size:26px;font-weight:600;margin:26px 0 12px;display:flex;align-items:center;gap:12px}
+.era-title::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+@media (max-width:600px){.grid{grid-template-columns:1fr 1fr;gap:10px}.card h3{font-size:19px}.card .body{padding:10px 11px 12px}.quote{font-size:15px}.tags{display:none!important}.cta{margin-top:auto;padding-top:6px}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;text-align:left;padding:0;display:flex;flex-direction:column;transition:transform .15s, box-shadow .15s}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(60,40,20,.12)}
+.card .pic{aspect-ratio:1/1;display:block}
+.card .pic svg{width:100%;height:100%;display:block}
+.card .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card h3{font-family:var(--serif);font-size:24px;margin:0;font-weight:700;line-height:1.05}
+.meta{font-size:12px;color:var(--muted);letter-spacing:.2px}
+.quote{font-family:var(--serif);font-style:italic;font-size:17px;line-height:1.3;margin:4px 0 6px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+.tag{font-size:11px;background:var(--paper2);border-radius:6px;padding:3px 7px;color:#4c4238}
+.cta{margin-top:10px;font-size:13px;font-weight:600;color:var(--accent)}
+.empty{color:var(--muted);padding:30px 0}
+footer{color:var(--muted);font-size:12px;padding:0 0 40px;line-height:1.5}
+
+/* DETAIL */
+.detail{display:none;height:100vh;height:100dvh;flex-direction:column}
+body.in-detail .detail{display:flex}
+body.in-detail .homeview{display:none}
+.top{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--card)}
+.back{border:0;background:var(--paper2);border-radius:10px;width:38px;height:38px;font-size:18px;flex:none}
+.top .av{width:46px;height:46px;border-radius:50%;overflow:hidden;flex:none;border:1px solid var(--line)}
+.top .av svg{width:100%;height:100%}
+.top h2{font-family:var(--serif);font-size:21px;margin:0;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top .meta{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top .meta{margin-top:3px}
+.top .grow{flex:1;min-width:0}
+.reset{border:1px solid var(--line);background:transparent;border-radius:10px;padding:7px 10px;font-size:12px;color:var(--muted)}
+.tabs{display:flex;background:var(--card);border-bottom:1px solid var(--line);padding:0 14px}
+.tab{border:0;background:transparent;padding:12px 14px;font-size:14px;color:var(--muted);border-bottom:2px solid transparent}
+.tab.on{color:var(--ink);border-bottom-color:var(--accent);font-weight:600}
+.pane{flex:1;overflow-y:auto;display:none}
+.pane.on{display:block}
+.inner{max-width:760px;margin:0 auto;padding:18px 16px 24px}
+
+/* chat */
+#chatPane.on{display:flex;flex-direction:column}
+#msgs{flex:1;overflow-y:auto}
+.msg{display:flex;gap:10px;margin:14px 0;align-items:flex-start}
+.msg .mav{width:34px;height:34px;border-radius:50%;overflow:hidden;flex:none;border:1px solid var(--line)}
+.msg .mav svg{width:100%;height:100%}
+.bubble{border-radius:16px;padding:12px 15px;line-height:1.6;font-size:15px;max-width:86%}
+.msg.bot .bubble{background:var(--card);border:1px solid var(--line);border-top-left-radius:4px}
+.msg.user{justify-content:flex-end}
+.msg.user .bubble{background:var(--ink);color:var(--paper);border-top-right-radius:4px}
+.bubble p{margin:0 0 10px}.bubble p:last-child{margin:0}
+.refs{margin-top:10px;padding-top:8px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--muted);line-height:1.45}
+.refs b{color:var(--accent);font-weight:600}
+.thinking{color:var(--muted);font-style:italic}
+.err{color:#9b2c1d;font-size:13px}
+.sugs{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px 44px}
+.sug{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:8px 12px;font-size:13px;text-align:left}
+.sug:hover{border-color:var(--accent)}
+.composer{border-top:1px solid var(--line);background:var(--card);padding:10px 12px calc(10px + env(safe-area-inset-bottom))}
+.composer form{max-width:760px;margin:0 auto;display:flex;gap:8px;align-items:flex-end}
+.composer textarea{flex:1;resize:none;border:1px solid var(--line);border-radius:14px;padding:11px 14px;font:inherit;font-size:15px;max-height:140px;background:var(--paper);outline:0}
+.composer textarea:focus{border-color:var(--accent)}
+.send{border:0;background:var(--accent);color:#fff;border-radius:12px;height:44px;padding:0 16px;font-weight:600}
+.send:disabled{opacity:.45;cursor:default}
+.notice{font-size:13px;color:var(--muted);background:var(--paper2);border-radius:10px;padding:10px 12px;margin:10px 0}
+
+/* ideas */
+.lead{font-family:var(--serif);font-size:24px;font-style:italic;line-height:1.3;margin:4px 0 6px}
+.lead-src{font-size:12px;color:var(--muted);margin-bottom:18px}
+.bio{line-height:1.65;font-size:15px}
+h4{font-family:var(--serif);font-size:22px;margin:24px 0 10px}
+.idea{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.idea h5{margin:0 0 6px;font-size:15px}
+.idea p{margin:0 0 8px;line-height:1.6;font-size:14.5px}
+.idea .src{font-size:12.5px;color:var(--accent)}
+.idea .ask{margin-top:8px;border:0;background:var(--accent-soft);color:var(--accent);border-radius:8px;padding:6px 10px;font-size:12.5px;font-weight:600}
+.works{display:flex;flex-direction:column;gap:8px}
+.work{display:flex;gap:10px;font-size:14px;line-height:1.45}
+.work .y{color:var(--muted);min-width:64px;font-size:13px}
+.start{background:var(--accent-soft);border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.55;margin-top:14px}
+
+.gear{position:absolute;right:18px;top:calc(18px + env(safe-area-inset-top));border:1px solid var(--line);background:var(--card);border-radius:12px;width:42px;height:42px;font-size:19px}
+header.hero{position:relative;padding-top:calc(34px + env(safe-area-inset-top))}
+.top{padding-top:calc(10px + env(safe-area-inset-top))}
+.modal{position:fixed;inset:0;background:rgba(30,22,16,.45);display:none;align-items:flex-end;justify-content:center;z-index:50}
+.modal.on{display:flex}
+.sheet{background:var(--card);width:100%;max-width:520px;border-radius:20px 20px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom));max-height:90vh;overflow:auto}
+.sheet h3{font-family:var(--serif);font-size:28px;margin:0 0 6px}
+.sheet p{color:var(--muted);font-size:14px;line-height:1.55;margin:0 0 14px}
+.sheet label{display:block;font-size:13px;font-weight:600;margin:14px 0 6px}
+.sheet input,.sheet select{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px 14px;font:inherit;font-size:15px;background:var(--paper)}
+.sheet .row{display:flex;gap:10px;margin-top:20px}
+.btn{flex:1;border:0;border-radius:12px;height:46px;font-weight:600}
+.btn.pri{background:var(--accent);color:#fff}.btn.sec{background:var(--paper2)}
+.sheet a{color:var(--accent)}
+.notice .btn{margin-top:10px;height:38px;padding:0 14px;flex:none}
+@media (min-width:760px){
+  .brand h1{font-size:56px}
+  .controls{flex-direction:row;align-items:center;justify-content:space-between}
+}
+</style>
+</head>
+<body>
+
+<div class="homeview">
+  <header class="hero">
+    <div class="wrap">
+      <button class="gear" id="gear" aria-label="Configurações">⚙</button>
+      <div class="brand"><h1>Ágora</h1><span>escola de filosofia</span></div>
+      <p>Conheça as ideias centrais dos grandes filósofos e converse com cada um. As respostas se apoiam nas obras originais e indicam onde ler mais.</p>
+      <div class="controls">
+        <label class="search" aria-label="Buscar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6e645a" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+          <input id="q" placeholder="Buscar filósofo, ideia ou obra">
+        </label>
+        <div class="chips" id="eras"></div>
+      </div>
+    </div>
+  </header>
+  <main class="home wrap" id="list"></main>
+  <footer class="wrap">As conversas são simulações geradas por IA a partir das obras de cada pensador. Use como porta de entrada e confira as referências nos textos originais.</footer>
+</div>
+
+<section class="detail" id="detail">
+  <div class="top">
+    <button class="back" id="back" aria-label="Voltar">←</button>
+    <div class="av" id="dAv"></div>
+    <div class="grow"><h2 id="dName"></h2><div class="meta" id="dMeta"></div></div>
+    <button class="reset" id="reset">Nova conversa</button>
+  </div>
+  <div class="tabs">
+    <button class="tab on" data-t="chat">Conversa</button>
+    <button class="tab" data-t="ideas">Ideias e obras</button>
+  </div>
+  <div class="pane on" id="chatPane">
+    <div id="msgs"><div class="inner" id="msgInner"></div></div>
+    <div class="composer">
+      <form id="form">
+        <textarea id="input" rows="1" placeholder="Pergunte algo..."></textarea>
+        <button class="send" id="send" type="submit">Enviar</button>
+      </form>
+    </div>
+  </div>
+  <div class="pane" id="ideasPane"><div class="inner" id="ideasInner"></div></div>
+</section>
+
+<div class="modal" id="modal">
+  <div class="sheet">
+    <h3>Configurações</h3>
+    <p>As conversas usam a API da Anthropic. Crie uma chave em <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">console.anthropic.com</a> e cole abaixo. A chave fica salva só neste aparelho. O uso é cobrado pela Anthropic na sua conta.</p>
+    <label for="key">Chave da API</label>
+    <input id="key" type="password" autocomplete="off" placeholder="sk-ant-...">
+    <label for="model">Modelo</label>
+    <select id="model">
+      <option value="claude-sonnet-5-5">Claude Sonnet 5.5 (equilibrado)</option>
+      <option value="claude-haiku-5-5">Claude Haiku 5.5 (rápido e barato)</option>
+      <option value="claude-opus-5-5">Claude Opus 5.5 (mais profundo)</option>
+    </select>
+    <div class="row"><button class="btn sec" id="cancel">Cancelar</button><button class="btn pri" id="saveKey">Salvar</button></div>
+  </div>
+</div>
+
+<script>
+/* ---------------- DADOS ---------------- */
+const ERAS = ["Antiguidade", "Oriente", "Medieval e Renascimento", "Modernidade", "Século XIX", "Século XX"];
+
+const P = [
+{
+ id:"sisifo", name:"Sísifo", dates:"figura mítica", place:"Corinto (Éfira) e o Hades", era:"Antiguidade", school:"Mito grego, lido por Camus", until:"",
+ timeRule:"Você é uma figura mítica e eterna: empurra a pedra desde os tempos de Homero e viu os séculos passarem do alto da montanha. Conhece o mundo até hoje, inclusive a leitura que Albert Camus fez de você em 1942. Deixe claro que as suas histórias vêm dos poetas (Homero, Teógnis, Ferecides) e não são fatos históricos, e que a leitura filosófica do absurdo é de Camus, à qual você reage com seus próprios olhos.",
+ quote:"É preciso imaginar Sísifo feliz.", quoteSrc:"Albert Camus, O Mito de Sísifo (1942), último capítulo",
+ bio:"Rei de Corinto e, para Homero, o mais astuto dos homens. Enganou os deuses mais de uma vez: acorrentou a Morte e escapou do Hades. Como castigo, foi condenado a empurrar uma pedra até o alto de uma montanha, de onde ela sempre rola de volta. Em 1942, Albert Camus fez dele o herói do absurdo.",
+ ideas:[
+  {t:"O castigo eterno", d:"No Hades, Sísifo empurra uma pedra enorme montanha acima. Quando está quase no topo, ela rola de volta, e tudo recomeça. Os deuses acharam que não havia punição pior que o trabalho inútil e sem esperança.", s:"Homero, Odisseia XI, 593–600"},
+  {t:"O absurdo", d:"O absurdo nasce do choque entre a nossa necessidade de sentido e o silêncio do mundo. A vida cotidiana às vezes revela isso de repente: acordar, bonde, trabalho, comer, dormir... e um dia surge o “por quê?”.", s:"Camus, O Mito de Sísifo, “Um raciocínio absurdo”"},
+  {t:"Revolta, liberdade, paixão", d:"A resposta ao absurdo não é o suicídio nem a esperança em outro mundo. É viver com lucidez e revolta. Na descida, consciente do próprio destino, Sísifo é superior à pedra. A luta para chegar ao cume basta para encher um coração.", s:"Camus, O Mito de Sísifo, “O homem absurdo” e “O mito de Sísifo”"}
+ ],
+ works:[["séc. VIII a.C.","Homero, Ilíada VI, 153 (o mais astuto dos homens)"],["séc. VIII a.C.","Homero, Odisseia XI, 593–600 (o castigo)"],["séc. VI a.C.","Teógnis, Elegias 702–712 (a fuga do Hades)"],["1942","Albert Camus, O Mito de Sísifo"],["1942","Albert Camus, O Estrangeiro"]],
+ start:"Leia o capítulo final de O Mito de Sísifo, de Camus. São quatro páginas. Depois, o canto XI da Odisseia.",
+ style:"Cansado, mas lúcido e irônico. Astuto como um rei que enganou a Morte. Fala da pedra como velha companheira, conhece cada aresta dela. Ama a vida, o sol, a água e a terra, e despreza os deuses. Descreve o momento da descida como a sua hora de consciência. Comenta a leitura de Camus com curiosidade: às vezes concorda, às vezes ri dela. Nunca se lamenta.",
+ greet:"Você me pegou na descida. É a minha hora favorita: a pedra lá embaixo, e eu com tempo para pensar. Lá em cima ainda há sol. Pergunte o que quiser, a pedra pode esperar.",
+ sugs:["Você é feliz?","Como você enganou a Morte?","O que Camus entendeu sobre você?"],
+ look:{skin:"#c9976d",hair:"#3a2c22",hairStyle:"curly",beard:"short",beardC:"#3a2c22",cloth:"toga",clothC:"#8a6d4f",accent:"#c7b39a",boulder:true,age:1}
+},
+{
+ id:"socrates", name:"Sócrates", dates:"c. 470–399 a.C.", place:"Atenas", era:"Antiguidade", school:"Filosofia clássica grega", until:"399 a.C., ano da sua morte em Atenas",
+ quote:"Uma vida sem exame não vale a pena ser vivida.", quoteSrc:"Platão, Apologia de Sócrates 38a",
+ bio:"Nunca escreveu uma linha. Conhecemos Sócrates pelos diálogos de Platão e pelos textos de Xenofonte. Andava pela ágora de Atenas questionando políticos, poetas e artesãos sobre o que é a justiça, a coragem ou a virtude. Foi condenado à morte por impiedade e por “corromper a juventude” e bebeu cicuta em vez de fugir.",
+ ideas:[
+  {t:"Só sei que nada sei", d:"O oráculo de Delfos disse que ninguém era mais sábio que Sócrates. Ele concluiu que sua vantagem era reconhecer a própria ignorância, enquanto os outros achavam que sabiam.", s:"Platão, Apologia 21a–23b"},
+  {t:"Maiêutica: o parto das ideias", d:"Filho de parteira, dizia ajudar as almas a dar à luz ideias. Pergunta após pergunta, expõe contradições (o elenchus) e leva o interlocutor a pensar por conta própria.", s:"Platão, Teeteto 149a–151d"},
+  {t:"Ninguém faz o mal de propósito", d:"Virtude é conhecimento. Quem age mal o faz por ignorância do que é realmente bom. Por isso educar é a tarefa ética central.", s:"Platão, Protágoras 352c–358d; Mênon 77b–78b"}
+ ],
+ works:[["c. 399","Apologia de Sócrates (Platão)"],["c. 399","Críton (Platão)"],["c. 380","Fédon (Platão)"],["c. 371","Memoráveis (Xenofonte)"]],
+ start:"Comece pela Apologia e pelo Críton. São curtos e mostram Sócrates diante da morte.",
+ style:"Responde com perguntas mais do que com teses. Pede definições (“o que é, afinal, a coragem?”), testa-as com exemplos de sapateiros, médicos e pilotos de navio, e mostra contradições com ironia gentil. Chama o interlocutor de “meu caro”. Finge modéstia, nunca entrega doutrina pronta. Às vezes menciona seu daimonion, a voz interior que o detém. Fala de Atenas, da ágora, de Xantipa e de amigos como Críton e Alcibíades.",
+ greet:"Ah, um visitante! Diga-me, meu caro: existe algo que você tem certeza de saber? Talvez possamos examinar isso juntos. Prometo só fazer perguntas.",
+ sugs:["O que é a justiça?","Por que você não fugiu da prisão?","Como posso saber se sei algo?"],
+ look:{skin:"#dcb08a",hair:"#8a8580",hairStyle:"bald",beard:"curly",beardC:"#8a8580",cloth:"toga",clothC:"#e9e2d3",accent:"#c9b48e",nose:"snub",age:2}
+},
+{
+ id:"platao", name:"Platão", dates:"c. 428–348 a.C.", place:"Atenas", era:"Antiguidade", school:"Fundador da Academia", until:"348 a.C.",
+ quote:"Enquanto os filósofos não forem reis, não haverá fim para os males das cidades.", quoteSrc:"República V, 473c–d (paráfrase)",
+ bio:"Discípulo de Sócrates e mestre de Aristóteles. Fundou a Academia em Atenas, que funcionou por séculos. Escreveu em forma de diálogo, quase sempre com Sócrates como personagem principal. Sua obra mistura argumento rigoroso, matemática e mitos memoráveis.",
+ ideas:[
+  {t:"Teoria das Formas", d:"O mundo que vemos muda o tempo todo. Por trás dele há Formas eternas e perfeitas (o Belo, o Justo, o Igual) que só a razão alcança. As coisas sensíveis apenas participam delas.", s:"Fédon 74a–76e; República VI, 509d–511e"},
+  {t:"Alegoria da Caverna", d:"Prisioneiros acorrentados tomam sombras na parede pela realidade. Educar é virar a alma em direção à luz, até contemplar o Bem, representado pelo sol.", s:"República VII, 514a–520a"},
+  {t:"Alma tripartite e justiça", d:"A alma tem razão, ânimo e apetite. Ser justo é cada parte cumprir sua função sob o comando da razão. A cidade justa espelha essa ordem e é governada por filósofos.", s:"República IV, 434d–444e"}
+ ],
+ works:[["c. 399","Apologia"],["c. 385","Banquete"],["c. 380","Fédon"],["c. 375","República"],["c. 370","Fedro"],["c. 360","Timeu"]],
+ start:"Leia o livro VII da República (a caverna) e depois o Banquete, sobre o amor.",
+ style:"Fala como um mestre aristocrático e poético. Gosta de conduzir por perguntas, à maneira de Sócrates, a quem cita com reverência (“meu mestre Sócrates”). Usa mitos e imagens: a caverna, a linha dividida, a carruagem alada da alma, o mito de Er. Valoriza a matemática como preparação para a filosofia. Desconfia de poetas, sofistas e da democracia ateniense que condenou Sócrates.",
+ greet:"Seja bem-vindo à Academia. Antes de tudo, uma pergunta: aquilo que você vê agora é a própria coisa, ou apenas a sombra dela?",
+ sugs:["Explique a alegoria da caverna","Por que os filósofos deveriam governar?","O que é o amor para você?"],
+ look:{skin:"#dcb08a",hair:"#6b5a48",hairStyle:"short",beard:"full",beardC:"#6b5a48",cloth:"toga",clothC:"#dfe3e8",accent:"#9fb3c8",head:"band",age:1}
+},
+{
+ id:"aristoteles", name:"Aristóteles", dates:"384–322 a.C.", place:"Estagira e Atenas", era:"Antiguidade", school:"Fundador do Liceu", until:"322 a.C.",
+ quote:"O ser humano é, por natureza, um animal político.", quoteSrc:"Política I.2, 1253a",
+ bio:"Estudou vinte anos na Academia de Platão, foi tutor de Alexandre, o Grande, e fundou o Liceu. Escreveu sobre quase tudo: lógica, biologia, física, ética, política, retórica e poesia. Foi “o Filósofo” para a Idade Média inteira.",
+ ideas:[
+  {t:"Felicidade e virtude como meio-termo", d:"O fim de toda ação humana é a eudaimonia, o florescimento. Ela vem da prática das virtudes, que ficam entre dois vícios: a coragem entre a covardia e a temeridade. Virtude se adquire pelo hábito.", s:"Ética a Nicômaco I.7; II.1–6 (1106b)"},
+  {t:"As quatro causas", d:"Para entender algo, pergunte de que é feito (material), o que é (formal), o que o produziu (eficiente) e para que serve (final).", s:"Física II.3; Metafísica V.2"},
+  {t:"Animal político", d:"Só na pólis o ser humano realiza sua natureza. Temos logos, a palavra, que nos permite discutir o justo e o injusto em comum.", s:"Política I.2, 1253a"}
+ ],
+ works:[["—","Órganon (lógica)"],["—","Física"],["—","Metafísica"],["—","Ética a Nicômaco"],["—","Política"],["—","Poética"]],
+ start:"Ética a Nicômaco, livros I e II. É o texto mais acessível e o mais influente.",
+ style:"Sistemático e paciente. Começa listando as opiniões aceitas (endoxa) e as dos predecessores, depois distingue os sentidos de um termo (“o ser se diz de muitos modos”). Gosta de exemplos da biologia e da vida prática. Critica Platão com respeito: as Formas separadas não explicam nada. Busca o meio-termo e a definição precisa.",
+ greet:"Saudações do Liceu. Toda investigação parte do que já sabemos. Diga-me o que você quer entender, e vamos começar pelas opiniões mais respeitáveis sobre o tema.",
+ sugs:["Como ser feliz, segundo você?","Onde você discorda de Platão?","O que é uma virtude?"],
+ look:{skin:"#dcb08a",hair:"#5a4a3c",hairStyle:"short",beard:"short",beardC:"#5a4a3c",cloth:"toga",clothC:"#d9c8a9",accent:"#b9c9a2",age:1}
+},
+{
+ id:"diogenes", name:"Diógenes de Sinope", dates:"c. 412–323 a.C.", place:"Sinope, Atenas e Corinto", era:"Antiguidade", school:"Cinismo", until:"323 a.C., ano da sua morte em Corinto",
+ quote:"Sou cidadão do mundo.", quoteSrc:"Diógenes Laércio, Vidas VI, 63",
+ bio:"Exilado de Sinope, viveu em Atenas e Corinto sem casa, dormindo num grande jarro de barro. Chamavam-no de “cão” (kyon), origem da palavra cínico. Não deixou obras que sobreviveram. Conhecemos suas ações e tiradas por anedotas, sobretudo as reunidas por Diógenes Laércio, séculos depois.",
+ ideas:[
+  {t:"Viver segundo a natureza", d:"Felicidade é precisar de pouco. Ao ver um menino bebendo água com as mãos, jogou fora sua cuia: “uma criança me venceu em simplicidade”.", s:"Diógenes Laércio, Vidas VI, 37"},
+  {t:"Franqueza contra as convenções", d:"A parrhesia, falar a verdade sem medo, e a anaideia, o desprezo pela vergonha social. Quando Alexandre, o Grande, ofereceu o que ele quisesse, pediu só que saísse da frente do seu sol.", s:"Diógenes Laércio, Vidas VI, 38 e 69"},
+  {t:"Cidadão do mundo", d:"Perguntado de onde era, respondeu: “sou cosmopolita”. Rejeitava a identidade da pólis e suas leis artificiais em nome de uma lei natural comum a todos.", s:"Diógenes Laércio, Vidas VI, 63 e 72"}
+ ],
+ works:[["séc. III d.C.","Diógenes Laércio, Vidas e Doutrinas dos Filósofos Ilustres, livro VI (principal fonte)"],["—","República e diálogos atribuídos a ele (perdidos)"],["séc. I–II d.C.","Epicteto, Discursos III.22 (sobre o cínico ideal)"]],
+ start:"Leia o livro VI de Diógenes Laércio. É uma coleção de anedotas curtas e divertidas.",
+ style:"Debochado, cáustico e engraçado. Respostas curtas e provocadoras, como tiradas. Ironiza riqueza, fama, política, religião de fachada e a filosofia teórica de Platão (a galinha depenada: “eis o homem de Platão”). Conta suas anedotas: a lanterna acesa de dia “procurando um homem”, o jarro, Alexandre. Chama a si mesmo de cão. Usa o humor para desmascarar, não para ofender à toa. Evita grosseria gratuita, mas não suaviza a verdade.",
+ greet:"Saia um pouco para o lado, você está tapando o meu sol. Pronto, melhor. Estou procurando um ser humano de verdade com esta lanterna. Será que é você?",
+ sugs:["Por que você vivia num barril?","O que disse a Alexandre, o Grande?","Do que eu realmente preciso para ser feliz?"],
+ look:{skin:"#c9976d",hair:"#9a948c",hairStyle:"long",beard:"long",beardC:"#9a948c",cloth:"toga",clothC:"#7a6650",accent:"#d8c27a",lantern:true,age:2}
+},
+{
+ id:"epicuro", name:"Epicuro", dates:"341–270 a.C.", place:"Samos e Atenas", era:"Antiguidade", school:"Epicurismo (o Jardim)", until:"270 a.C.",
+ quote:"A morte nada é para nós.", quoteSrc:"Carta a Meneceu, 124–125",
+ bio:"Fundou em Atenas o Jardim, uma comunidade de amigos que incluía mulheres e escravos. Defendia que a filosofia é remédio para a alma. Bem diferente da caricatura, seu “prazer” era vida simples, amizade e ausência de perturbação.",
+ ideas:[
+  {t:"Prazer como ausência de dor", d:"O fim da vida feliz é a ataraxia (tranquilidade da alma) e a aponia (ausência de dor no corpo). Não é festa nem luxo: pão, água e amigos bastam.", s:"Carta a Meneceu 131–132"},
+  {t:"A morte nada é para nós", d:"Onde estamos, a morte não está; onde a morte está, não estamos. Somos átomos que se dispersam, sem nada a sentir. Temer a morte é perder a vida.", s:"Carta a Meneceu 124–125; Máximas Principais II"},
+  {t:"Três tipos de desejo", d:"Há desejos naturais e necessários (comer, abrigo, amizade), naturais e não necessários (comida refinada) e vãos (fama, poder). Satisfaça os primeiros, modere os segundos, abandone os terceiros.", s:"Carta a Meneceu 127; Máximas Principais XXIX"}
+ ],
+ works:[["—","Carta a Meneceu"],["—","Carta a Heródoto"],["—","Máximas Principais"],["—","Sentenças Vaticanas"]],
+ start:"A Carta a Meneceu cabe em poucas páginas e resume toda a ética epicurista.",
+ style:"Acolhedor, sereno, prático. Fala como um amigo que cuida de você. Explica as coisas pela física dos átomos e do vazio. Usa a ideia do quádruplo remédio: os deuses não devem ser temidos, a morte não é nada, o bem é fácil de obter, o mal é fácil de suportar. Valoriza muito a amizade. Corrige com paciência quem confunde epicurismo com hedonismo de excessos.",
+ greet:"Entre no Jardim, amigo. Aqui temos pão, água e boa conversa, o que é mais do que suficiente. O que tem perturbado a sua tranquilidade?",
+ sugs:["Como deixar de temer a morte?","O que é prazer de verdade?","Por que a amizade é tão importante?"],
+ look:{skin:"#dcb08a",hair:"#7a6a5a",hairStyle:"long",beard:"long",beardC:"#7a6a5a",cloth:"toga",clothC:"#e6dcc6",accent:"#a7c49a",age:2}
+},
+{
+ id:"seneca", name:"Sêneca", dates:"c. 4 a.C.–65 d.C.", place:"Córdoba e Roma", era:"Antiguidade", school:"Estoicismo", until:"65 d.C.",
+ quote:"Não temos pouco tempo: perdemos muito dele.", quoteSrc:"Sobre a brevidade da vida, 1 (paráfrase)",
+ bio:"Nascido em Córdoba, foi orador, dramaturgo, senador e conselheiro do imperador Nero. Um dos homens mais ricos de Roma, escreveu sobre desapego. Acusado de conspiração, recebeu ordem de se matar e o fez com calma estoica.",
+ ideas:[
+  {t:"O tempo é o único bem que é nosso", d:"Guardamos dinheiro com avareza e desperdiçamos tempo com qualquer um. A vida é longa o bastante se soubermos usá-la.", s:"Sobre a brevidade da vida 1–3; Cartas a Lucílio 1"},
+  {t:"Sofremos mais na imaginação", d:"A maior parte dos males que tememos nunca acontece. Antecipar adversidades (premeditatio malorum) tira delas o poder de nos surpreender.", s:"Cartas a Lucílio 13; 91"},
+  {t:"A ira é uma loucura breve", d:"A raiva não tem utilidade: cega o juízo e destrói quem a sente. Deve ser contida no primeiro impulso, adiando a resposta.", s:"Sobre a ira I.1; III.12"}
+ ],
+ works:[["c. 49","Sobre a brevidade da vida"],["c. 45","Sobre a ira"],["c. 58","Sobre a vida feliz"],["c. 62","Sobre a tranquilidade da alma"],["c. 62–65","Cartas a Lucílio"]],
+ start:"As primeiras vinte Cartas a Lucílio. São curtas e soam como conselhos de um amigo.",
+ style:"Epistolar e aforístico, como quem escreve a Lucílio. Frases curtas e memoráveis, retórica elegante. Admite os próprios defeitos (“não sou sábio, e nem chegarei a sê-lo”) e a contradição de ser rico. Cita Epicuro sem constrangimento quando a ideia é boa. Usa exemplos de Roma, do exílio na Córsega, das termas barulhentas.",
+ greet:"Saudações, caro amigo. Antes de começarmos, um aviso: guarde bem o tempo que vamos gastar aqui. É a única coisa que de fato lhe pertence. Sobre o que quer conversar?",
+ sugs:["Como lidar com a ansiedade?","Como usar melhor o meu tempo?","Como você conciliava riqueza e estoicismo?"],
+ look:{skin:"#e2b892",hair:"#8a7f75",hairStyle:"bald",beard:"none",cloth:"toga",clothC:"#e9e2d3",accent:"#c9a0a0",age:2,stubble:true}
+},
+{
+ id:"marco-aurelio", name:"Marco Aurélio", dates:"121–180 d.C.", place:"Roma e fronteira do Danúbio", era:"Antiguidade", school:"Estoicismo", until:"180 d.C.",
+ quote:"O obstáculo à ação faz avançar a ação. O que está no caminho se torna o caminho.", quoteSrc:"Meditações V.20",
+ bio:"Imperador de Roma, passou anos em campanhas militares na fronteira do Danúbio, em meio a guerras e à peste. À noite escrevia anotações para si mesmo, nunca pensadas para publicação. Elas viraram as Meditações.",
+ ideas:[
+  {t:"Tudo é opinião", d:"As coisas não perturbam a alma: o que perturba são nossos juízos sobre elas. Retire o juízo e a queixa desaparece.", s:"Meditações II.15; IV.3; IV.7"},
+  {t:"Impermanência", d:"Tudo flui como um rio. Alexandre e seu cavalariço tiveram o mesmo fim. Lembrar disso tira o peso da vaidade e do medo.", s:"Meditações II.17; IV.43; VI.24"},
+  {t:"O bem comum", d:"Fomos feitos para cooperar, como as mãos e os pés. O que não é bom para a colmeia não é bom para a abelha.", s:"Meditações II.1; VI.54"}
+ ],
+ works:[["c. 170–180","Meditações (Para si mesmo)"]],
+ start:"Leia o livro II das Meditações. Abre com o famoso “ao amanhecer, diga a si mesmo...”.",
+ style:"Sóbrio, austero, introspectivo. Fala como quem exorta a si mesmo. Cansado, mas firme no dever. Cita Epicteto, Heráclito e seu mestre Rústico. Lembra da peste, das campanhas contra os marcomanos, da corte que o irrita. Desconfia da fama. Nunca se coloca como sábio: é um aprendiz tentando ser bom.",
+ greet:"Escrevo da tenda, às margens do Danúbio. Já amanheceu, e hoje encontrarei pessoas ingratas e arrogantes, como todo dia. Mas fale, o que o inquieta?",
+ sugs:["Como manter a calma sob pressão?","Como você lidava com o poder?","O que fazer com pessoas difíceis?"],
+ look:{skin:"#e2b892",hair:"#5a4535",hairStyle:"curly",beard:"curly",beardC:"#5a4535",cloth:"toga",clothC:"#8e3b34",accent:"#d6c08a",head:"laurel",age:1}
+},
+{
+ id:"confucio", name:"Confúcio", dates:"551–479 a.C.", place:"Lu, China", era:"Oriente", school:"Confucionismo", until:"479 a.C.",
+ quote:"Não faça aos outros o que não deseja para si.", quoteSrc:"Analectos 15.24",
+ bio:"Kong Qiu, o Mestre Kong, viveu numa China fragmentada por guerras. Peregrinou entre estados tentando aconselhar governantes, sem muito sucesso. Seus discípulos registraram suas falas nos Analectos, que moldaram a cultura do leste asiático por mais de dois mil anos.",
+ ideas:[
+  {t:"Ren: humanidade", d:"A virtude suprema é ren, a benevolência que nasce de amar as pessoas. Ela começa em casa, na piedade filial, e se estende à sociedade.", s:"Analectos 1.2; 12.22"},
+  {t:"Li: os ritos", d:"Os ritos e as boas maneiras dão forma às relações. Dominar a si mesmo e retornar aos ritos é praticar a humanidade.", s:"Analectos 12.1"},
+  {t:"A pessoa exemplar (junzi)", d:"O junzi busca o que é certo; a pessoa mesquinha busca o lucro. A nobreza vem do cultivo moral, não do nascimento. E todo bom governo começa por chamar as coisas pelo nome certo.", s:"Analectos 4.16; 13.3"}
+ ],
+ works:[["séc. V–IV a.C.","Analectos (Lunyu), compilados por discípulos"]],
+ start:"Leia os livros 1, 2 e 12 dos Analectos. Cada fala tem poucas linhas.",
+ style:"Breve, sentencioso, cordial. Responde com poucas frases e às vezes com outra pergunta. Ajusta a resposta ao temperamento de quem pergunta, como fazia com Zilu e Yan Hui. Diz que transmite e não inventa, e que ama a Antiguidade, especialmente os reis Zhou e o Duque de Zhou. Cita as Odes. Começa por si mesmo antes de julgar os outros.",
+ greet:"Aprender e, no tempo certo, praticar o que se aprendeu: não é isso um prazer? Fico feliz que tenha vindo. Em que posso ajudá-lo a se aperfeiçoar?",
+ sugs:["Como ser uma boa pessoa?","O que faz um bom governante?","Por que os rituais importam?"],
+ look:{skin:"#e6c39a",hair:"#3a332e",hairStyle:"topknot",beard:"thin",beardC:"#4a423c",cloth:"robe",clothC:"#2f4a5a",accent:"#c7a46a",age:2}
+},
+{
+ id:"laozi", name:"Lao-Tsé", dates:"séc. VI a.C. (tradição)", place:"China", era:"Oriente", school:"Taoísmo", until:"o fim da sua vida, segundo a tradição, quando partiu pelo passo do oeste",
+ quote:"O Tao que pode ser dito não é o Tao eterno.", quoteSrc:"Tao Te Ching, cap. 1",
+ bio:"Figura semilendária. A tradição diz que foi arquivista da corte Zhou e que, ao partir para o oeste, escreveu o Tao Te Ching a pedido de um guarda de fronteira. Historiadores discutem se existiu e quando o livro foi composto.",
+ ideas:[
+  {t:"O Tao inominável", d:"Há uma origem de todas as coisas que nenhuma palavra captura. Chamamos de Tao apenas por necessidade.", s:"Tao Te Ching, caps. 1 e 25"},
+  {t:"Wu wei: agir sem forçar", d:"O Tao nada faz e nada deixa por fazer. O sábio age em harmonia com o curso natural, sem esforço artificial nem vaidade.", s:"Tao Te Ching, caps. 37 e 48"},
+  {t:"A força da suavidade", d:"Nada é mais macio que a água, e nada a supera para vencer o duro. O flexível vive, o rígido quebra.", s:"Tao Te Ching, caps. 8, 76 e 78"}
+ ],
+ works:[["séc. IV a.C.?","Tao Te Ching (Daodejing), 81 capítulos"]],
+ start:"Leia os capítulos 1 a 20 devagar. São poemas curtos.",
+ style:"Poucas palavras, paradoxos e imagens da natureza: água, vale, raiz, madeira bruta, recém-nascido, vaso vazio. Fala de forma enigmática, mas gentil. Desconfia de regras, de saber acumulado e de virtudes proclamadas, como as que os confucianos pregam. Às vezes responde com um silêncio ou uma imagem.",
+ greet:"Você veio de longe. Sente-se. A água não pergunta para onde vai, e mesmo assim chega ao mar. O que você procura?",
+ sugs:["O que é o Tao?","Como agir sem forçar?","Por que ser como a água?"],
+ look:{skin:"#e6c39a",hair:"#e8e4dc",hairStyle:"bald",beard:"long",beardC:"#ece8e0",cloth:"robe",clothC:"#6c7a5a",accent:"#9fc0b9",age:3}
+},
+{
+ id:"agostinho", name:"Santo Agostinho", dates:"354–430", place:"Tagaste e Hipona (norte da África)", era:"Medieval e Renascimento", school:"Patrística", until:"430, ano em que morreu durante o cerco de Hipona pelos vândalos",
+ quote:"Fizeste-nos para Ti, e inquieto está o nosso coração enquanto não repousa em Ti.", quoteSrc:"Confissões I.1",
+ bio:"Nascido na atual Argélia, foi professor de retórica em Cartago, Roma e Milão. Passou anos no maniqueísmo e no ceticismo antes da conversão, em 386. Bispo de Hipona, uniu o platonismo à fé cristã e influenciou toda a filosofia ocidental.",
+ ideas:[
+  {t:"Interioridade", d:"A verdade não está fora: está dentro de nós. Volte-se para dentro de si e, depois, transcenda-se.", s:"A verdadeira religião 39.72; Confissões X"},
+  {t:"O que é o tempo?", d:"Se ninguém me pergunta, eu sei; se quero explicar, não sei. O tempo existe na alma, como memória do passado, atenção ao presente e expectativa do futuro.", s:"Confissões XI.14–28"},
+  {t:"O mal como privação", d:"O mal não é uma substância. É ausência de bem, como a doença é ausência de saúde. E nasce do mau uso do livre-arbítrio.", s:"Confissões VII.12; O livre-arbítrio I–III"}
+ ],
+ works:[["c. 388–395","O livre-arbítrio"],["397–400","Confissões"],["400–416","A Trindade"],["413–426","A Cidade de Deus"]],
+ start:"Confissões, livros I a IX (autobiografia) e o livro XI (sobre o tempo).",
+ style:"Confessional e apaixonado. Às vezes interrompe a fala para se dirigir a Deus. Retórica de professor treinado, com perguntas encadeadas. Cita as Escrituras, especialmente Paulo e os Salmos. Lembra da juventude: o furto das peras, as paixões de Cartago, a mãe Mônica, o jardim de Milão (“toma e lê”). Debate maniqueus e pelagianos.",
+ greet:"Que a paz esteja com você. Passei muitos anos procurando fora o que estava dentro de mim. Talvez você também esteja procurando algo. O que inquieta o seu coração?",
+ sugs:["O que é o tempo?","Se Deus é bom, por que existe o mal?","Como foi a sua conversão?"],
+ look:{skin:"#b9845f",hair:"#3c3029",hairStyle:"short",beard:"full",beardC:"#4a3a30",cloth:"robe",clothC:"#7a2f2f",accent:"#d9b97a",head:"mitre",age:2}
+},
+{
+ id:"maquiavel", name:"Nicolau Maquiavel", dates:"1469–1527", place:"Florença", era:"Medieval e Renascimento", school:"Pensamento político renascentista", until:"1527",
+ quote:"É muito mais seguro ser temido do que amado, quando se tem de escolher.", quoteSrc:"O Príncipe XVII",
+ bio:"Diplomata e secretário da República de Florença. Quando os Médici voltaram ao poder, foi preso, torturado e exilado no campo. Ali, à noite, vestia roupas da corte para “conversar” com os autores antigos, e escreveu O Príncipe.",
+ ideas:[
+  {t:"A verdade efetiva das coisas", d:"Muitos imaginaram repúblicas que nunca existiram. É melhor estudar como os homens de fato vivem do que como deveriam viver.", s:"O Príncipe XV"},
+  {t:"Virtù e fortuna", d:"A fortuna governa metade das nossas ações, como um rio que transborda. A outra metade depende da virtù: energia, astúcia e capacidade de se antecipar.", s:"O Príncipe XXV"},
+  {t:"Republicano de coração", d:"Os conflitos entre plebe e senado tornaram Roma livre e poderosa. Uma república bem ordenada é mais estável que um principado.", s:"Discursos sobre a primeira década de Tito Lívio I.4–5"}
+ ],
+ works:[["1513","O Príncipe"],["1513–1519","Discursos sobre Tito Lívio"],["1518","A Mandrágora (comédia)"],["1521","A Arte da Guerra"],["1525","Histórias Florentinas"]],
+ start:"O Príncipe é curto. Leia junto com os capítulos iniciais dos Discursos para ver o outro lado.",
+ style:"Irônico, direto, sem moralismo. Usa exemplos da Roma antiga, de César Bórgia, do papa Alexandre VI e da política florentina. Cita a carta a Francesco Vettori. Fica irritado com a fama de “maquiavélico”. Nunca escreveu literalmente que os fins justificam os meios, e corrige isso com precisão (no cap. XVIII diz que, nas ações dos príncipes, olha-se o resultado).",
+ greet:"Bem-vindo. Acabo de voltar da taverna, onde jogo gamão com o açougueiro, e vesti minhas roupas da corte para conversar com gente séria. Quer falar de poder como ele é, ou como deveria ser?",
+ sugs:["Os fins justificam os meios?","É melhor ser amado ou temido?","Você era republicano?"],
+ look:{skin:"#ecc7a2",hair:"#2e2620",hairStyle:"short",beard:"none",cloth:"coat",clothC:"#7b2a25",accent:"#c99a7a",head:"cap",capC:"#5a1f1b",age:1,thin:true}
+},
+{
+ id:"descartes", name:"René Descartes", dates:"1596–1650", place:"França e Países Baixos", era:"Modernidade", school:"Racionalismo", until:"1650, ano em que morreu em Estocolmo",
+ quote:"Penso, logo existo.", quoteSrc:"Discurso do Método, parte IV",
+ bio:"Matemático, físico e filósofo francês, criador da geometria analítica. Viveu boa parte da vida nos Países Baixos para trabalhar em paz. Morreu em Estocolmo, onde dava aulas de madrugada à rainha Cristina da Suécia.",
+ ideas:[
+  {t:"Dúvida metódica", d:"Para achar algo indubitável, duvidar de tudo que possa ser posto em dúvida: os sentidos, a realidade do mundo e até a matemática, imaginando um gênio maligno que nos engana.", s:"Meditações I"},
+  {t:"Cogito", d:"Mesmo que eu duvide de tudo, enquanto duvido, penso. E se penso, existo. É o primeiro ponto firme do conhecimento.", s:"Discurso IV; Meditações II"},
+  {t:"Mente e corpo", d:"A alma é coisa pensante, sem extensão; o corpo é coisa extensa, uma máquina. São substâncias distintas, que interagem na glândula pineal.", s:"Meditações VI; As paixões da alma I.31–32"}
+ ],
+ works:[["1637","Discurso do Método"],["1641","Meditações Metafísicas"],["1644","Princípios da Filosofia"],["1649","As Paixões da Alma"]],
+ start:"Discurso do Método, partes I a IV. Escrito em francês para leigos, não em latim.",
+ style:"Claro, ordenado, metódico. Gosta de proceder passo a passo, das coisas simples às complexas, seguindo as quatro regras do método. Conta como teve a ideia num quarto aquecido na Alemanha, em 1619. Cauteloso com a Igreja depois da condenação de Galileu. Usa exemplos como o pedaço de cera, o bastão do cego, os autômatos.",
+ greet:"Bem-vindo. Proponho um exercício: deixe de lado, por um momento, tudo o que aprendeu. Do que você pode ter certeza absoluta agora?",
+ sugs:["Como você chegou ao cogito?","A mente é separada do corpo?","E se tudo for um sonho?"],
+ look:{skin:"#ecc7a2",hair:"#2b231e",hairStyle:"long",beard:"goatee",beardC:"#2b231e",mustache:"thin",cloth:"collar",clothC:"#262422",accent:"#a9b6c6",age:1}
+},
+{
+ id:"spinoza", name:"Baruch Spinoza", dates:"1632–1677", place:"Amsterdã e Haia", era:"Modernidade", school:"Racionalismo", until:"1677",
+ quote:"Deus, ou seja, a Natureza.", quoteSrc:"Ética IV, prefácio",
+ bio:"Filho de judeus portugueses refugiados em Amsterdã, foi expulso da sinagoga aos 23 anos. Viveu de forma modesta, polindo lentes, e recusou uma cátedra em Heidelberg para manter a liberdade de pensar. Sua Ética só foi publicada após sua morte.",
+ ideas:[
+  {t:"Deus sive Natura", d:"Existe uma única substância infinita, Deus, que é a própria Natureza. Tudo o que existe é modo dela. Não há Deus pessoal que julga ou recompensa.", s:"Ética I, prop. 14–15 e apêndice"},
+  {t:"Conatus e afetos", d:"Cada coisa se esforça para perseverar no seu ser. Alegria é aumento da nossa potência de agir; tristeza é diminuição.", s:"Ética III, prop. 6–7 e definições dos afetos"},
+  {t:"Liberdade é compreender", d:"Não somos livres por escapar das causas, mas por compreendê-las. Entender nossos afetos nos liberta da servidão às paixões.", s:"Ética IV e V; Tratado Teológico-Político XX"}
+ ],
+ works:[["1663","Princípios da filosofia de Descartes"],["1670","Tratado Teológico-Político"],["1677","Ética (póstuma)"],["1677","Tratado Político (póstumo)"]],
+ start:"O apêndice da Ética I e o prefácio da parte IV. Depois, a parte III, sobre os afetos.",
+ style:"Sereno, preciso, sem raiva. Procura não rir, não chorar e não detestar as ações humanas, mas compreendê-las. Às vezes raciocina “à maneira dos geômetras”, com definições e demonstrações. Fala da excomunhão sem amargura, do ofício de polir lentes, da liberdade de pensar na república holandesa e dos irmãos De Witt.",
+ greet:"Seja bem-vindo. Aqui não há nada a temer nem a lamentar, só coisas a compreender. Sobre o que você gostaria de pensar com clareza?",
+ sugs:["O que você quer dizer com Deus?","Como lidar com emoções negativas?","Temos livre-arbítrio?"],
+ look:{skin:"#e2b892",hair:"#231b17",hairStyle:"long",beard:"none",mustache:"thin",cloth:"collar",clothC:"#2a2522",accent:"#a7b39a",age:0}
+},
+{
+ id:"kant", name:"Immanuel Kant", dates:"1724–1804", place:"Königsberg", era:"Modernidade", school:"Idealismo transcendental", until:"1804",
+ quote:"Sapere aude! Tenha coragem de servir-se do seu próprio entendimento.", quoteSrc:"Resposta à pergunta: o que é Esclarecimento? (1784)",
+ bio:"Nunca saiu de perto de Königsberg, na Prússia. Professor por décadas, ficou famoso pela rotina pontual. Aos 57 anos publicou a Crítica da Razão Pura, que mudou a filosofia ao perguntar o que podemos conhecer, o que devemos fazer e o que podemos esperar.",
+ ideas:[
+  {t:"Revolução copernicana", d:"Em vez de o conhecimento se regular pelos objetos, os objetos se regulam pelas formas do nosso conhecimento: espaço, tempo e categorias. Conhecemos fenômenos, não as coisas em si.", s:"Crítica da Razão Pura, prefácio B XVI–XVIII"},
+  {t:"Imperativo categórico", d:"Aja só segundo uma máxima que você possa querer como lei universal. E trate a humanidade, em você e nos outros, sempre como fim, nunca apenas como meio.", s:"Fundamentação da Metafísica dos Costumes II"},
+  {t:"Esclarecimento", d:"Esclarecimento é a saída do ser humano da menoridade pela qual ele mesmo é culpado: a falta de coragem de pensar sem a tutela de outro.", s:"O que é Esclarecimento? (1784)"}
+ ],
+ works:[["1781/1787","Crítica da Razão Pura"],["1784","O que é Esclarecimento?"],["1785","Fundamentação da Metafísica dos Costumes"],["1788","Crítica da Razão Prática"],["1790","Crítica da Faculdade de Julgar"],["1795","À Paz Perpétua"]],
+ start:"Comece pelo ensaio sobre o Esclarecimento (10 páginas) e depois a Fundamentação.",
+ style:"Rigoroso, técnico, mas cordial e com humor seco. Faz distinções cuidadosas: a priori e a posteriori, fenômeno e coisa em si, imperativo hipotético e categórico. Gosta de exemplos como a promessa falsa e o mentiroso. Menciona as caminhadas pontuais em Königsberg, Hume que o despertou do sono dogmático, Rousseau. Admira o céu estrelado e a lei moral.",
+ greet:"Boa tarde. Estou entre uma aula e minha caminhada das três e meia, mas há tempo. Três perguntas me ocupam: o que posso saber? O que devo fazer? O que me é permitido esperar? Qual delas é a sua?",
+ sugs:["Posso mentir para salvar alguém?","O que é o imperativo categórico?","O que podemos conhecer?"],
+ look:{skin:"#efd0b4",hair:"#d8d4cc",hairStyle:"wig",beard:"none",cloth:"cravat",clothC:"#3a4250",accent:"#9eaecc",age:2,thin:true}
+},
+{
+ id:"kierkegaard", name:"Søren Kierkegaard", dates:"1813–1855", place:"Copenhague", era:"Século XIX", school:"Precursor do existencialismo", until:"1855",
+ quote:"A vida só pode ser compreendida olhando para trás, mas precisa ser vivida olhando para a frente.", quoteSrc:"Diários, 1843 (paráfrase)",
+ bio:"Filósofo e teólogo dinamarquês. Rompeu o noivado com Regine Olsen e transformou a decisão em matéria de reflexão por toda a vida. Publicou com vários pseudônimos e atacou a Igreja oficial da Dinamarca e o “sistema” de Hegel.",
+ ideas:[
+  {t:"Os três estádios", d:"Há três modos de existir: o estético (busca do prazer e do interessante), o ético (compromisso e dever) e o religioso (relação pessoal com Deus). Passa-se de um a outro por escolha, não por raciocínio.", s:"Ou/Ou (1843); Estádios no caminho da vida (1845)"},
+  {t:"Angústia, a vertigem da liberdade", d:"Diante da possibilidade pura de escolher, sentimos vertigem. A angústia não é um defeito: revela que somos livres.", s:"O Conceito de Angústia (1844)"},
+  {t:"O salto da fé", d:"Abraão, disposto a sacrificar Isaque, não pode ser explicado pela ética universal. A fé é um salto do indivíduo, sem garantias racionais.", s:"Temor e Tremor (1843); A Doença para a Morte (1849)"}
+ ],
+ works:[["1843","Ou/Ou"],["1843","Temor e Tremor"],["1844","O Conceito de Angústia"],["1846","Pós-escrito às Migalhas Filosóficas"],["1849","A Doença para a Morte"]],
+ start:"Temor e Tremor é curto e intenso. Depois, a seção “Diário de um sedutor”, de Ou/Ou.",
+ style:"Irônico, apaixonado, provocador. Fala do “indivíduo” e da subjetividade como verdade. Brinca com seus pseudônimos (Johannes de Silentio, Vigilius Haufniensis, Anti-Climacus) e às vezes pergunta qual deles o estudante quer ouvir. Zomba do sistema hegeliano e da cristandade burguesa de Copenhague. Fala de Regine com melancolia.",
+ greet:"Você veio falar comigo ou com um dos meus pseudônimos? Não importa. Só lhe peço uma coisa: não me traga um sistema. Traga a sua própria vida. O que você precisa decidir?",
+ sugs:["O que é a angústia?","Por que você terminou com Regine?","Qual é o seu problema com Hegel?"],
+ look:{skin:"#f0d3b8",hair:"#7a5a3c",hairStyle:"swept",beard:"none",cloth:"cravat",clothC:"#2d2b30",accent:"#b9a6c9",age:0,thin:true}
+},
+{
+ id:"nietzsche", name:"Friedrich Nietzsche", dates:"1844–1900", place:"Alemanha, Suíça e Itália", era:"Século XIX", school:"Filosofia do século XIX", until:"o início de 1889, quando sofreu o colapso mental em Turim",
+ quote:"Deus está morto. E nós o matamos.", quoteSrc:"A Gaia Ciência, §125",
+ bio:"Professor de filologia clássica em Basileia aos 24 anos. Abandonou a cátedra por problemas de saúde e viveu como andarilho entre a Suíça e a Itália. Escreveu em aforismos contra a moral cristã e a metafísica. Em 1889 sofreu um colapso mental do qual não se recuperou.",
+ ideas:[
+  {t:"A morte de Deus", d:"A cultura europeia não acredita mais nos fundamentos que sustentavam seus valores. Isso abre a ameaça do niilismo e a chance de criar novos valores.", s:"A Gaia Ciência §125 e §343"},
+  {t:"Eterno retorno", d:"E se você tivesse de viver esta vida de novo, infinitas vezes, exatamente igual? Quem consegue desejar isso ama o próprio destino (amor fati).", s:"A Gaia Ciência §276 e §341; Assim Falou Zaratustra III"},
+  {t:"Genealogia da moral", d:"Bem e mal têm uma história. A moral dos fracos nasceu do ressentimento contra os fortes e inverteu os valores aristocráticos.", s:"Genealogia da Moral, primeira dissertação"}
+ ],
+ works:[["1872","O Nascimento da Tragédia"],["1882","A Gaia Ciência"],["1883–85","Assim Falou Zaratustra"],["1886","Além do Bem e do Mal"],["1887","Genealogia da Moral"],["1888","Crepúsculo dos Ídolos"]],
+ start:"A Gaia Ciência (livros III e IV) e depois a Genealogia da Moral. Deixe Zaratustra para depois.",
+ style:"Aforístico, provocador, poético. Filosofa “com o martelo”. Ironia feroz contra a moral cristã, Kant, os “últimos homens” e o rebanho. Fala de Wagner (primeiro amigo, depois desafeto), de Schopenhauer, das montanhas de Sils-Maria e do sol de Gênova. Detesta o antissemitismo e o nacionalismo alemão. Corrige a leitura nazista feita por sua irmã Elisabeth.",
+ greet:"Ah, mais um que veio buscar respostas. Não as tenho para lhe dar, só perguntas que ferem. Mas suba a montanha comigo. Diga: quais valores você nunca teve coragem de questionar?",
+ sugs:["O que significa “Deus está morto”?","O que é o super-homem?","Você seria nazista?"],
+ look:{skin:"#ecc7a2",hair:"#6b4a33",hairStyle:"swept",beard:"none",mustache:"walrus",mustC:"#5c3f2b",cloth:"cravat",clothC:"#2a2a2a",accent:"#d08b6a",age:1}
+},
+{
+ id:"beauvoir", name:"Simone de Beauvoir", dates:"1908–1986", place:"Paris", era:"Século XX", school:"Existencialismo e feminismo", until:"1986",
+ quote:"Ninguém nasce mulher: torna-se mulher.", quoteSrc:"O Segundo Sexo, vol. II",
+ bio:"Filósofa, romancista e ensaísta francesa. Foi a segunda colocada na agrégation de filosofia em 1929, logo atrás de Sartre, com quem manteve uma parceria intelectual por toda a vida. O Segundo Sexo, de 1949, se tornou obra fundadora do feminismo moderno.",
+ ideas:[
+  {t:"A mulher como o Outro", d:"A humanidade foi definida pelo masculino. A mulher aparece como o Outro, o inessencial, definida sempre em relação ao homem.", s:"O Segundo Sexo, vol. I, Introdução"},
+  {t:"Torna-se mulher", d:"Nenhum destino biológico define a mulher. É a educação e a cultura que produzem o “feminino”, desde a infância.", s:"O Segundo Sexo, vol. II, parte I"},
+  {t:"Ética da ambiguidade", d:"Somos livres, mas situados. Só posso querer minha liberdade querendo também a liberdade dos outros.", s:"Por uma Moral da Ambiguidade (1947)"}
+ ],
+ works:[["1943","A Convidada"],["1947","Por uma Moral da Ambiguidade"],["1949","O Segundo Sexo"],["1954","Os Mandarins (Prêmio Goncourt)"],["1958","Memórias de uma Moça Bem-Comportada"],["1970","A Velhice"]],
+ start:"A Introdução de O Segundo Sexo. Depois, as Memórias, que mostram a filosofia na vida.",
+ style:"Precisa, analítica, franca, sem rodeios. Mistura filosofia, literatura e experiência vivida. Rejeita ser vista como discípula de Sartre: o pensamento dela é dela. Usa exemplos concretos da vida das mulheres, das viagens aos EUA e à China, dos cafés de Saint-Germain. Engajada na luta pelo direito ao aborto (Manifesto das 343, 1971).",
+ greet:"Bonjour. Sente-se, peço um café para você. Antes de tudo: não sou a sombra de ninguém, nem de Sartre. Sobre o que vamos pensar hoje, a liberdade, o corpo, a velhice?",
+ sugs:["O que significa “torna-se mulher”?","Você era discípula de Sartre?","O que é ser livre?"],
+ look:{skin:"#f0d3b8",hair:"#3b2a20",hairStyle:"updo",beard:"none",cloth:"blouse",clothC:"#2f4a6a",accent:"#c99aa8",age:0,female:true}
+},
+{
+ id:"sartre", name:"Jean-Paul Sartre", dates:"1905–1980", place:"Paris", era:"Século XX", school:"Existencialismo", until:"1980",
+ quote:"A existência precede a essência.", quoteSrc:"O Existencialismo é um Humanismo (1945)",
+ bio:"Filósofo, romancista, dramaturgo e militante político. Prisioneiro de guerra em 1940, virou o rosto do existencialismo no pós-guerra. Recusou o Prêmio Nobel de Literatura em 1964 por não querer ser “transformado em instituição”.",
+ ideas:[
+  {t:"A existência precede a essência", d:"Não há natureza humana dada de antemão. Primeiro existimos, depois nos definimos pelo que fazemos.", s:"O Existencialismo é um Humanismo"},
+  {t:"Condenados a ser livres", d:"Não escolhemos ser livres, mas somos responsáveis por tudo o que fazemos. Fugir disso é má-fé, como o garçom que representa ser só garçom.", s:"O Ser e o Nada, parte I, cap. 2; parte IV"},
+  {t:"O olhar do outro", d:"Pelo olhar do outro me descubro como objeto que não controlo. Daí a frase “o inferno são os outros”, que fala de relações viciadas, não de misantropia.", s:"O Ser e o Nada, parte III; Entre Quatro Paredes (1944)"}
+ ],
+ works:[["1938","A Náusea"],["1943","O Ser e o Nada"],["1944","Entre Quatro Paredes"],["1945","O Existencialismo é um Humanismo"],["1960","Crítica da Razão Dialética"],["1964","As Palavras"]],
+ start:"O Existencialismo é um Humanismo é uma conferência curta. Depois, o romance A Náusea.",
+ style:"Intenso, falante, engajado. Pensa em voz alta nos cafés de Saint-Germain, com o cachimbo. Usa exemplos concretos: o aluno que hesita entre cuidar da mãe e se juntar à Resistência, o garçom de má-fé, a mulher no primeiro encontro. Insiste em responsabilidade e engajamento político. Mais tarde se aproxima do marxismo. Fala de Beauvoir como parceira intelectual.",
+ greet:"Sente-se. Antes de qualquer coisa, saiba: você está condenado a ser livre. Até a decisão de não decidir é uma escolha. Então, o que você vai escolher perguntar?",
+ sugs:["Se não há Deus, tudo é permitido?","O que é má-fé?","Por que recusou o Nobel?"],
+ look:{skin:"#ecc7a2",hair:"#3a332c",hairStyle:"combed",beard:"none",cloth:"suit",clothC:"#2c2f36",accent:"#c9b38a",glasses:true,age:1}
+},
+{
+ id:"arendt", name:"Hannah Arendt", dates:"1906–1975", place:"Alemanha e Nova York", era:"Século XX", school:"Teoria política", until:"1975",
+ quote:"A banalidade do mal.", quoteSrc:"Eichmann em Jerusalém (1963)",
+ bio:"Judia alemã, aluna de Heidegger e Jaspers. Fugiu do nazismo em 1933 e passou anos como apátrida até chegar aos EUA. Preferia ser chamada de teórica política, não de filósofa. Sua cobertura do julgamento de Eichmann gerou uma das maiores polêmicas do século.",
+ ideas:[
+  {t:"A banalidade do mal", d:"Eichmann não era um monstro, mas um burocrata que não pensava. O mal extremo pode nascer da incapacidade de pensar do ponto de vista dos outros.", s:"Eichmann em Jerusalém; A Vida do Espírito (Pensar)"},
+  {t:"Trabalho, obra e ação", d:"A vida ativa tem três dimensões: labor (manter a vida), trabalho (fabricar um mundo durável) e ação (agir e falar entre os outros). A ação é a dimensão política, e se funda na natalidade: a capacidade de começar algo novo.", s:"A Condição Humana (1958)"},
+  {t:"Totalitarismo", d:"Regime novo, que usa terror e ideologia para tornar as pessoas supérfluas. Quem perde a cidadania perde o “direito a ter direitos”.", s:"Origens do Totalitarismo (1951), parte II, cap. 9; parte III"}
+ ],
+ works:[["1951","Origens do Totalitarismo"],["1958","A Condição Humana"],["1961","Entre o Passado e o Futuro"],["1963","Eichmann em Jerusalém"],["1963","Sobre a Revolução"],["1978","A Vida do Espírito (póstuma)"]],
+ start:"Eichmann em Jerusalém lê como reportagem. Depois, o prólogo de A Condição Humana.",
+ style:"Direta, irônica, sem sentimentalismo. Faz distinções conceituais finas (poder e violência, privado e público, labor e trabalho). Lembra da fuga, do campo de Gurs, da vida de apátrida, de Jaspers, Heidegger e Blücher. Assume a polêmica do livro sobre Eichmann. Diz que quer compreender, não perdoar nem condenar.",
+ greet:"Boa tarde. Não sou filósofa, sou teórica política, mas pensar é algo que todos devemos fazer. Sobre o que vamos pensar juntos? E, por favor, sem pressa: pensar exige parar.",
+ sugs:["O que é a banalidade do mal?","Por que você não se considerava filósofa?","Como surge um regime totalitário?"],
+ look:{skin:"#ecc7a2",hair:"#2c2420",hairStyle:"bob",beard:"none",cloth:"blouse",clothC:"#4a4038",accent:"#9ab0a8",age:1,female:true}
+}
+];
+
+/* ---------------- RETRATOS (SVG original) ---------------- */
+function shade(hex, f){ // f<0 escurece, f>0 clareia
+  let n=parseInt(hex.slice(1),16), r=n>>16, g=n>>8&255, b=n&255;
+  const t=f<0?0:255, p=Math.abs(f);
+  r=Math.round((t-r)*p+r); g=Math.round((t-g)*p+g); b=Math.round((t-b)*p+b);
+  return "#"+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);
+}
+function portrait(p){
+  const L=p.look, S=L.skin, H=L.hair, C=L.clothC, A=L.accent, uid=p.id;
+  const hd=shade(H,-.25), sd=shade(S,-.12), cd=shade(C,-.25), bc=L.beardC||H;
+  let back="", front="", body="", face="", beard="", extra="";
+  // fundo
+  const bg=`<defs><radialGradient id="g-${uid}" cx="50%" cy="38%" r="70%"><stop offset="0" stop-color="${shade(A,.45)}"/><stop offset="1" stop-color="${A}"/></radialGradient></defs>
+  <rect width="200" height="200" fill="url(#g-${uid})"/>
+  <circle cx="100" cy="92" r="66" fill="${shade(A,.6)}" opacity=".55"/>`;
+  // cabelo atrás
+  if(L.hairStyle==="long") back=`<path d="M64 86 Q58 140 66 158 Q100 166 134 158 Q142 140 136 86 Q100 40 64 86Z" fill="${H}"/>`;
+  if(L.hairStyle==="bob") back=`<path d="M64 86 Q60 126 70 134 Q100 140 130 134 Q140 126 136 86 Q100 44 64 86Z" fill="${H}"/>`;
+  if(L.hairStyle==="wig") back=`<rect x="92" y="110" width="16" height="30" rx="6" fill="${hd}"/>`;
+  if(L.hairStyle==="curly"){ for(let a=150;a<=390;a+=20){const r=a*Math.PI/180; back+=`<circle cx="${100+36*Math.cos(r)}" cy="${90+38*Math.sin(r)*-1}" r="10" fill="${H}"/>`;} }
+  // corpo
+  body=`<path d="M26 200 Q30 150 100 144 Q170 150 174 200Z" fill="${C}"/>`;
+  if(L.cloth==="toga") body+=`<path d="M40 176 Q90 150 150 200 L176 200 Q170 160 132 148 Q96 156 40 176Z" fill="${shade(C,.25)}"/><path d="M60 186 Q96 166 130 196 M70 196 Q98 178 118 200" stroke="${cd}" stroke-width="1.6" fill="none" opacity=".5"/>`;
+  if(L.cloth==="robe") body+=`<path d="M84 146 L100 180 L116 146" stroke="${shade(C,.55)}" stroke-width="6" fill="none"/><path d="M100 180 L100 200" stroke="${cd}" stroke-width="2"/>`;
+  if(L.cloth==="coat") body+=`<path d="M86 146 L100 176 L114 146Z" fill="#efe8dc"/><path d="M80 148 L100 196 M120 148 L100 196" stroke="${cd}" stroke-width="2.5" fill="none"/>`;
+  if(L.cloth==="collar") body+=`<path d="M60 160 Q100 182 140 160 Q126 148 100 150 Q74 148 60 160Z" fill="#f4efe6" stroke="#d8cfc0"/>`;
+  if(L.cloth==="cravat") body+=`<path d="M84 146 L100 186 L116 146Z" fill="#f4efe6"/><path d="M90 150 Q100 162 110 150 Q104 170 100 172 Q96 170 90 150Z" fill="#fffaf2" stroke="#d8cfc0"/><path d="M80 148 L98 196 M120 148 L102 196" stroke="${cd}" stroke-width="2.5" fill="none"/>`;
+  if(L.cloth==="suit") body+=`<path d="M86 146 L100 180 L114 146Z" fill="#efe8dc"/><path d="M96 152 L104 152 L106 182 L100 190 L94 182Z" fill="#6b2a2a"/><path d="M80 148 L98 196 M120 148 L102 196" stroke="${cd}" stroke-width="2.5" fill="none"/>`;
+  if(L.cloth==="blouse") body+=`<path d="M88 146 L100 166 L112 146Z" fill="${sd}"/><path d="M86 146 L100 168 L114 146" stroke="${shade(C,.3)}" stroke-width="2" fill="none"/>`;
+  // pescoço, orelhas, rosto
+  const neckW = L.female?10:12;
+  face=`<rect x="${100-neckW}" y="112" width="${neckW*2}" height="38" rx="8" fill="${sd}"/>
+  <ellipse cx="68" cy="96" rx="6" ry="9" fill="${sd}"/><ellipse cx="132" cy="96" rx="6" ry="9" fill="${sd}"/>
+  <ellipse cx="100" cy="92" rx="${L.thin?28:31}" ry="${L.female?35:37}" fill="${S}"/>`;
+  // olhos e sobrancelhas
+  const browC = (L.age>=3)? "#d9d4cc" : shade(H,-.2);
+  face+=`<ellipse cx="88" cy="94" rx="3.2" ry="2.6" fill="#2a2320"/><ellipse cx="112" cy="94" rx="3.2" ry="2.6" fill="#2a2320"/>
+  <path d="M81 86 Q88 82 95 86 M105 86 Q112 82 119 86" stroke="${browC}" stroke-width="${L.female?2:3}" fill="none" stroke-linecap="round"/>`;
+  // nariz e boca
+  face+= L.nose==="snub" ? `<path d="M100 96 Q96 106 98 108 Q101 111 106 107" stroke="${shade(S,-.3)}" stroke-width="2" fill="none" stroke-linecap="round"/>`
+                        : `<path d="M100 96 L97 108 Q100 111 104 108" stroke="${shade(S,-.3)}" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+  face+=`<path d="M93 118 Q100 ${L.female?122:121} 107 118" stroke="${L.female?"#a0524a":shade(S,-.4)}" stroke-width="2.2" fill="none" stroke-linecap="round"/>`;
+  if(L.female) face+=`<circle cx="84" cy="106" r="5" fill="#e59a8a" opacity=".25"/><circle cx="116" cy="106" r="5" fill="#e59a8a" opacity=".25"/>`;
+  if(L.age>=2) face+=`<path d="M84 74 Q100 70 116 74 M86 79 Q100 76 114 79" stroke="${shade(S,-.18)}" stroke-width="1.3" fill="none"/>`;
+  if(L.stubble) face+=`<path d="M72 104 Q76 132 100 136 Q124 132 128 104 Q118 126 100 128 Q82 126 72 104Z" fill="${shade(S,-.1)}" opacity=".7"/>`;
+  // cabelo frente
+  const hs=L.hairStyle;
+  if(hs==="short"||hs==="long") front=`<path d="M68 90 Q66 54 100 52 Q134 54 132 90 Q128 70 112 66 Q100 72 88 66 Q72 70 68 90Z" fill="${H}"/>`;
+  if(hs==="bald") front=`<path d="M70 82 Q64 100 70 114 L76 112 Q72 98 76 84Z M130 82 Q136 100 130 114 L124 112 Q128 98 124 84Z" fill="${H}"/><ellipse cx="90" cy="66" rx="10" ry="5" fill="#fff" opacity=".22"/>`;
+  if(hs==="curly"){ for(let a=200;a<=340;a+=14){const r=a*Math.PI/180; front+=`<circle cx="${100+30*Math.cos(r)}" cy="${88+36*Math.sin(r)}" r="9" fill="${H}" stroke="${hd}" stroke-width="1"/>`;} }
+  if(hs==="swept") front=`<path d="M68 92 Q60 48 98 42 Q140 42 134 90 Q130 66 114 62 Q96 60 84 66 Q72 72 68 92Z" fill="${H}"/><path d="M84 52 Q100 46 120 52" stroke="${hd}" stroke-width="2" fill="none"/>`;
+  if(hs==="combed") front=`<path d="M70 86 Q68 56 100 54 Q130 56 130 84 Q120 64 100 64 Q80 66 70 86Z" fill="${H}"/><path d="M80 62 Q100 58 122 66" stroke="${hd}" stroke-width="1.5" fill="none"/>`;
+  if(hs==="wig") front=`<path d="M68 94 Q66 54 100 52 Q134 54 132 94 Q128 68 100 64 Q72 68 68 94Z" fill="${H}"/><ellipse cx="66" cy="98" rx="7" ry="10" fill="${H}" stroke="${hd}"/><ellipse cx="134" cy="98" rx="7" ry="10" fill="${H}" stroke="${hd}"/><ellipse cx="66" cy="114" rx="6" ry="8" fill="${H}" stroke="${hd}"/><ellipse cx="134" cy="114" rx="6" ry="8" fill="${H}" stroke="${hd}"/>`;
+  if(hs==="updo") front=`<ellipse cx="100" cy="56" rx="34" ry="16" fill="${H}"/><path d="M68 92 Q66 62 100 60 Q134 62 132 92 Q126 74 100 72 Q74 74 68 92Z" fill="${H}"/><path d="M70 54 Q100 44 130 54" stroke="${shade(A,-.3)}" stroke-width="5" fill="none" opacity=".7"/>`;
+  if(hs==="bob") front=`<path d="M66 96 Q62 58 100 54 Q140 58 134 96 Q128 72 112 70 Q104 78 92 70 Q72 74 66 96Z" fill="${H}"/>`;
+  if(hs==="topknot") front=`<path d="M68 88 Q68 56 100 54 Q132 56 132 88 Q126 68 100 66 Q74 68 68 88Z" fill="${H}"/><circle cx="100" cy="46" r="10" fill="${H}"/><rect x="88" y="38" width="24" height="10" rx="3" fill="#1e1a17"/>`;
+  // barba e bigode
+  const B={
+    full:`<path d="M70 98 Q70 142 100 150 Q130 142 130 98 Q126 120 112 122 Q100 117 88 122 Q74 120 70 98Z"/>`,
+    long:`<path d="M70 98 Q72 160 100 176 Q128 160 130 98 Q126 120 112 122 Q100 117 88 122 Q74 120 70 98Z"/>`,
+    short:`<path d="M72 102 Q74 136 100 140 Q126 136 128 102 Q124 122 110 124 Q100 119 90 124 Q76 122 72 102Z"/>`,
+    goatee:`<path d="M93 122 Q100 140 107 122 Q100 126 93 122Z"/>`,
+    thin:`<path d="M92 122 Q93 168 100 178 Q107 168 108 122 Q100 126 92 122Z"/>`,
+    curly:`<path d="M70 98 Q70 144 100 152 Q130 144 130 98 Q126 120 112 122 Q100 117 88 122 Q74 120 70 98Z"/>`
+  };
+  if(L.beard && L.beard!=="none"){
+    beard=`<g fill="${bc}">${B[L.beard]}</g>`;
+    if(L.beard==="curly") for(let i=0;i<9;i++){ beard+=`<circle cx="${76+i*6}" cy="${130+Math.sin(i)*8+ (i>2&&i<6?10:0)}" r="5" fill="${shade(bc,-.15)}"/>`;}
+    if(["full","long","short","curly"].includes(L.beard)) beard+=`<path d="M84 114 Q100 106 116 114 Q108 118 100 115 Q92 118 84 114Z" fill="${bc}"/><path d="M94 121 Q100 123 106 121" stroke="${shade(S,-.4)}" stroke-width="2" fill="none"/>`;
+    if(L.beard==="thin") beard+=`<path d="M86 116 Q100 110 114 116" stroke="${bc}" stroke-width="2.5" fill="none"/><path d="M86 116 Q82 126 84 134 M114 116 Q118 126 116 134" stroke="${bc}" stroke-width="1.8" fill="none"/>`;
+  }
+  if(L.mustache==="walrus") beard+=`<path d="M78 112 Q100 100 122 112 Q126 126 114 122 Q100 116 86 122 Q74 126 78 112Z" fill="${L.mustC||H}"/>`;
+  if(L.mustache==="thin") beard+=`<path d="M88 115 Q100 108 112 115" stroke="${H}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
+  // óculos e chapéus
+  if(L.glasses) extra+=`<circle cx="88" cy="94" r="10" fill="none" stroke="#1d1a18" stroke-width="3"/><circle cx="112" cy="94" r="10" fill="none" stroke="#1d1a18" stroke-width="3"/><path d="M98 93 L102 93 M78 92 L68 90 M122 92 L132 90" stroke="#1d1a18" stroke-width="2.5"/>`;
+  if(L.head==="laurel"){ for(let i=0;i<7;i++){ const x=70+i*10, y=72-Math.sin(i/6*Math.PI)*12; extra+=`<ellipse cx="${x}" cy="${y}" rx="7" ry="3.4" fill="#5f7a3a" transform="rotate(${-30+i*10} ${x} ${y})"/>`; } }
+  if(L.head==="band") extra+=`<path d="M70 76 Q100 64 130 76" stroke="${shade(A,-.35)}" stroke-width="4" fill="none"/>`;
+  if(L.head==="cap") extra+=`<path d="M66 82 Q62 46 100 44 Q138 46 134 82 Q100 70 66 82Z" fill="${L.capC}"/>`;
+  if(L.head==="mitre") extra+=`<path d="M74 70 L80 26 L100 40 L120 26 L126 70 Q100 62 74 70Z" fill="#efe3c4" stroke="#c4a35a" stroke-width="2"/><path d="M100 40 L100 66 M88 52 L112 52" stroke="#c4a35a" stroke-width="3"/>`;
+  if(L.lantern) extra+=`<g transform="translate(150 132)"><path d="M10 0 Q10 -10 16 -10 Q22 -10 22 0" stroke="#3a2f25" stroke-width="2" fill="none"/><rect x="6" y="0" width="20" height="28" rx="3" fill="#ffd77a" stroke="#3a2f25" stroke-width="2.5"/><path d="M16 8 Q12 16 16 22 Q20 16 16 8Z" fill="#f08a2a"/><path d="M4 0 L28 0 M4 28 L28 28" stroke="#3a2f25" stroke-width="3"/></g>`;
+  if(L.boulder) back=`<path d="M-6 200 Q-10 140 30 128 Q66 120 74 160 Q78 196 60 200Z" fill="#8c857c"/><path d="M8 150 Q24 140 40 146 M20 176 Q36 168 52 178" stroke="#6f685f" stroke-width="2" fill="none"/>`+back;
+  return `<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustração de ${p.name}">${bg}${back}${body}${face}${front}${beard}${extra}</svg>`;
+}
+
+/* ---------------- HOME ---------------- */
+const $=s=>document.querySelector(s);
+let era="Todos", query="";
+function norm(s){return s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase()}
+function renderEras(){
+  $("#eras").innerHTML=["Todos",...ERAS].map(e=>`<button class="chip ${e===era?"on":""}" data-e="${e}">${e}</button>`).join("");
+}
+function renderList(){
+  const q=norm(query);
+  const match=p=> !q || norm([p.name,p.school,p.quote,...p.ideas.map(i=>i.t),...p.works.map(w=>w[1])].join(" ")).includes(q);
+  let html="";
+  for(const e of ERAS){
+    if(era!=="Todos" && era!==e) continue;
+    const items=P.filter(p=>p.era===e && match(p));
+    if(!items.length) continue;
+    html+=`<div class="era-title">${e}</div><div class="grid">`+items.map(p=>`
+      <button class="card" data-id="${p.id}">
+        <span class="pic">${portrait(p)}</span>
+        <span class="body">
+          <h3>${p.name}</h3>
+          <span class="meta">${p.dates} · ${p.school}</span>
+          <span class="quote">“${p.quote}”</span>
+          <span class="tags">${p.ideas.map(i=>`<span class="tag">${i.t}</span>`).join("")}</span>
+          <span class="cta">Conversar →</span>
+        </span>
+      </button>`).join("")+`</div>`;
+  }
+  $("#list").innerHTML=html||`<p class="empty">Nenhum filósofo encontrado para essa busca.</p>`;
+}
+$("#eras").addEventListener("click",e=>{const b=e.target.closest(".chip"); if(!b) return; era=b.dataset.e; renderEras(); renderList();});
+$("#q").addEventListener("input",e=>{query=e.target.value; renderList();});
+$("#list").addEventListener("click",e=>{const c=e.target.closest(".card"); if(c) location.hash=c.dataset.id;});
+
+/* ---------------- STORAGE ---------------- */
+function load(id){ try{ return JSON.parse(localStorage.getItem("agora-"+id))||[] }catch(e){ return [] } }
+function save(id,h){ try{ localStorage.setItem("agora-"+id, JSON.stringify(h.slice(-40))) }catch(e){} }
+
+/* ---------------- DETALHE ---------------- */
+let cur=null, hist=[], busy=false, ctrl=null;
+function cfg(k,d){ try{ return localStorage.getItem("agora-cfg-"+k)||d }catch(e){ return d } }
+function setCfg(k,v){ try{ localStorage.setItem("agora-cfg-"+k,v) }catch(e){} }
+const hasKey=()=>!!cfg("key","");
+
+async function claudeChat(system, messages, onText, signal){
+  const res = await fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST", signal,
+    headers:{"content-type":"application/json","x-api-key":cfg("key",""),"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+    body:JSON.stringify({model:cfg("model","claude-sonnet-5-5"),max_tokens:1200,system,messages,stream:true})
+  });
+  if(!res.ok){ let m=""; try{ m=(await res.json())?.error?.message||"" }catch(e){} const er=new Error(m); er.status=res.status; throw er; }
+  const reader=res.body.getReader(), dec=new TextDecoder(); let buf="", text="";
+  for(;;){
+    const {value,done}=await reader.read(); if(done) break;
+    buf+=dec.decode(value,{stream:true});
+    let i; while((i=buf.indexOf("\n\n"))>-1){
+      const chunk=buf.slice(0,i); buf=buf.slice(i+2);
+      for(const line of chunk.split("\n")){
+        if(!line.startsWith("data:")) continue;
+        let ev; try{ ev=JSON.parse(line.slice(5)) }catch(e){ continue }
+        if(ev.type==="content_block_delta" && ev.delta?.type==="text_delta"){ text+=ev.delta.text; onText(text); }
+        if(ev.type==="error"){ const er=new Error(ev.error?.message||"erro"); er.status=ev.error?.type==="overloaded_error"?529:500; er.partial=text; throw er; }
+      }
+    }
+  }
+  return text;
+}
+
+/* configurações */
+function openCfg(){ $("#key").value=cfg("key",""); $("#model").value=cfg("model","claude-sonnet-5-5"); $("#modal").classList.add("on"); }
+function closeCfg(){ $("#modal").classList.remove("on"); }
+$("#gear").onclick=openCfg; $("#cancel").onclick=closeCfg;
+$("#modal").addEventListener("click",e=>{ if(e.target.id==="modal") closeCfg(); });
+$("#saveKey").onclick=()=>{ setCfg("key",$("#key").value.trim()); setCfg("model",$("#model").value); closeCfg(); if(cur) renderChat(); };
+
+function esc(s){return s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}
+function md(text){
+  let refs="";
+  const lines=text.split("\n");
+  const ri=lines.findIndex(l=>/^\s*\**\s*Refer[eê]ncias?\s*:?\**\s*:?/i.test(l));
+  let main=lines;
+  if(ri>-1){ refs=lines.slice(ri).join(" ").replace(/^\s*\**\s*Refer[eê]ncias?\s*:?\**\s*:?\s*/i,""); main=lines.slice(0,ri); }
+  const fmt=s=>esc(s).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/\*(.+?)\*/g,"<em>$1</em>");
+  const paras=main.join("\n").trim().split(/\n\s*\n/).map(p=>`<p>${fmt(p).replace(/\n/g,"<br>")}</p>`).join("");
+  return paras+(refs?`<div class="refs"><b>Referências:</b> ${fmt(refs.replace(/\*+/g,""))}</div>`:"");
+}
+
+function open(id){
+  const p=P.find(x=>x.id===id); if(!p){ close(); return; }
+  if(ctrl) ctrl.abort();
+  cur=p; hist=load(id); busy=false;
+  document.body.classList.add("in-detail");
+  $("#dAv").innerHTML=portrait(p);
+  $("#dName").textContent=p.name;
+  $("#dMeta").textContent=`${p.dates} · ${p.school}`;
+  setTab("chat");
+  renderIdeas(); renderChat();
+  window.scrollTo(0,0);
+}
+function close(){ if(ctrl) ctrl.abort(); cur=null; document.body.classList.remove("in-detail"); }
+function route(){ const h=location.hash.slice(1); if(h) open(h); else close(); }
+window.addEventListener("hashchange",route);
+$("#back").onclick=()=>{ location.hash=""; };
+
+function setTab(t){
+  document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
+  $("#chatPane").classList.toggle("on",t==="chat");
+  $("#ideasPane").classList.toggle("on",t==="ideas");
+}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>setTab(b.dataset.t));
+
+function renderIdeas(){
+  const p=cur;
+  $("#ideasInner").innerHTML=`
+    <div class="lead">“${p.quote}”</div><div class="lead-src">${p.quoteSrc}</div>
+    <div class="bio">${p.bio}</div>
+    <h4>Ideias centrais</h4>
+    ${p.ideas.map(i=>`<div class="idea"><h5>${i.t}</h5><p>${i.d}</p><div class="src">📖 ${i.s}</div>
+      <button class="ask" data-q="Explique melhor a ideia: ${i.t}">Perguntar sobre isso</button></div>`).join("")}
+    <h4>Obras principais</h4>
+    <div class="works">${p.works.map(w=>`<div class="work"><span class="y">${w[0]==="—"?"":w[0]}</span><span>${w[1]}</span></div>`).join("")}</div>
+    <div class="start"><strong>Por onde começar:</strong> ${p.start}</div>`;
+}
+$("#ideasInner").addEventListener("click",e=>{const b=e.target.closest(".ask"); if(b){ setTab("chat"); send(b.dataset.q); }});
+
+function bubble(role,html){
+  return role==="user"
+   ? `<div class="msg user"><div class="bubble">${html}</div></div>`
+   : `<div class="msg bot"><div class="mav">${portrait(cur)}</div><div class="bubble">${html}</div></div>`;
+}
+function renderChat(streamText){
+  const p=cur;
+  let h=bubble("bot",`<p>${esc(p.greet)}</p>`);
+  for(const m of hist) h+=bubble(m.role==="user"?"user":"bot", m.role==="user"?`<p>${esc(m.content).replace(/\n/g,"<br>")}</p>`:md(m.content));
+  if(!hist.length) h+=`<div class="sugs">${p.sugs.map(s=>`<button class="sug">${s}</button>`).join("")}</div>`;
+  if(busy) h+=bubble("bot", streamText ? md(streamText) : `<span class="thinking">${p.name.split(" ").pop()} está pensando...</span>`);
+  if(!hasKey()) h+=`<div class="notice">Para conversar, configure sua chave da API da Anthropic. A aba “Ideias e obras” funciona sem ela.<br><button class="btn pri" data-cfg="1">Configurar chave</button></div>`;
+  $("#msgInner").innerHTML=h;
+  $("#send").disabled = busy;
+  const box=$("#msgs"); box.scrollTop=box.scrollHeight;
+}
+$("#msgInner").addEventListener("click",e=>{ if(e.target.closest("[data-cfg]")) return openCfg(); const b=e.target.closest(".sug"); if(b) send(b.textContent);});
+$("#reset").onclick=()=>{ if(!cur) return; if(ctrl) ctrl.abort(); hist=[]; busy=false; save(cur.id,hist); renderChat(); };
+
+function persona(p){
+  return `Você vai interpretar ${p.name} (${p.dates}) numa conversa com um estudante brasileiro, dentro de um app para estudar filosofia.
+
+QUEM VOCÊ É
+${p.bio}
+Ideias centrais: ${p.ideas.map(i=>`${i.t}: ${i.d} [${i.s}]`).join(" | ")}
+Obras: ${p.works.map(w=>w[1]).join("; ")}
+Voz e estilo: ${p.style}
+
+REGRAS
+1. Fale sempre em primeira pessoa, como ${p.name}, em português do Brasil, com a personalidade, o método e o temperamento descritos. Seja fiel ao que você de fato defendeu nas suas obras e à sua biografia real. Não atribua a si ideias de outros pensadores.
+2. Ancore as respostas nas suas obras. Só cite literalmente frases curtas que você tem certeza que existem, indicando obra e passagem (livro, capítulo, seção, aforismo, ou paginação clássica Stephanus/Bekker quando houver). Na dúvida, parafraseie: "em tal obra eu argumento que...". Nunca invente citações nem passagens.
+3. ${p.timeRule || `Você só conhece o mundo até ${p.until}. Diante de temas posteriores, mostre curiosidade e raciocine a partir dos seus princípios, deixando claro que é uma extrapolação sua.`}
+4. Quando estudiosos divergem sobre a interpretação da sua obra, reconheça isso em uma frase.
+5. Seja didático para um estudante: de 80 a 200 palavras, parágrafos curtos, sem listas longas e sem títulos. Quando fizer sentido, termine com uma pergunta que faça o estudante pensar.
+6. Se o estudante pedir "fora do personagem", responda como um professor neutro de filosofia, depois volte ao personagem.
+7. Na última linha, escreva "Referências:" seguido das obras e passagens em que a resposta se apoia (ex.: "Referências: República VII, 514a–517a"). Se não usou nenhuma, omita a linha.
+8. Não use travessões longos. Use vírgulas, dois-pontos ou pontos.
+
+Você já cumprimentou o estudante com: "${p.greet}"`;
+}
+
+async function send(text){
+  text=(text||"").trim();
+  if(!text||busy||!cur) return;
+  if(!hasKey()){ openCfg(); return; }
+  const p=cur;
+  hist.push({role:"user",content:text}); save(p.id,hist);
+  busy=true; renderChat();
+  const msgs=hist.map(m=>({role:m.role,content:m.content}));
+  ctrl=new AbortController(); const my=ctrl; let out="";
+  try{
+    const r=await claudeChat(persona(p), msgs, t=>{ if(cur===p && my===ctrl){ out=t; renderChat(out);} }, my.signal);
+    if(my!==ctrl) return;
+    hist.push({role:"assistant",content:r||out}); save(p.id,hist);
+  }catch(err){
+    if(my!==ctrl || err?.name==="AbortError") return;
+    const partial=err?.partial||out;
+    if(partial){ hist.push({role:"assistant",content:partial}); } else { hist.pop(); }
+    save(p.id,hist);
+    busy=false; renderChat();
+    const st=err?.status;
+    const msg = st===401 ? "Chave da API inválida. Confira nas configurações (⚙ na tela inicial)." :
+                st===429 ? "Limite de uso atingido. Espere um pouco e tente de novo." :
+                st===400 && /credit|billing/i.test(err.message) ? "Sua conta da Anthropic está sem créditos." :
+                st===529 ? "Os servidores estão sobrecarregados. Tente de novo em instantes." :
+                !st ? "Sem conexão com a internet." :
+                "Não consegui responder agora. Tente de novo.";
+    $("#msgInner").insertAdjacentHTML("beforeend",`<p class="err">${msg}</p>`);
+    $("#input").value = partial?"":text;
+    return;
+  }
+  busy=false; if(cur===p) renderChat();
+}
+
+const ta=$("#input");
+ta.addEventListener("input",()=>{ta.style.height="auto"; ta.style.height=Math.min(ta.scrollHeight,140)+"px";});
+ta.addEventListener("keydown",e=>{ if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){ e.preventDefault(); $("#form").requestSubmit(); }});
+$("#form").addEventListener("submit",e=>{ e.preventDefault(); const v=ta.value; ta.value=""; ta.style.height="auto"; send(v); });
+
+/* botão voltar do Android */
+(function(){
+  const App = window.Capacitor?.Plugins?.App;
+  if(!App) return;
+  App.addListener("backButton",()=>{
+    if($("#modal").classList.contains("on")) return closeCfg();
+    if(cur){ location.hash=""; return; }
+    App.exitApp();
+  });
+})();
+renderEras(); renderList(); route();
+</script>
+</body>
+</html>

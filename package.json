@@ -1,0 +1,19 @@
+{
+  "name": "agora-filosofia",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ágora: app para estudar filosofia conversando com os filósofos",
+  "scripts": {
+    "android:add": "cap add android",
+    "android:sync": "cap sync android",
+    "android:open": "cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "6.2.3",
+    "@capacitor/app": "6.0.3",
+    "@capacitor/core": "6.2.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "6.2.3"
+  }
+}
